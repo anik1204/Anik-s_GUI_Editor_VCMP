@@ -1,0 +1,47 @@
+/*
+	Author: S.L.C
+	Coded for Map Editor,
+	You are not allowed to release it as a snippet/script as yours.
+*/
+
+const filePath = "scripts/Client Script/";
+
+function ReadTextFromFile( path )
+{
+    local f = file(path,"rb"), s = "", n = 0;
+    f.seek(0, 'e');
+    n = f.tell();
+    if (n == 0)
+        return s;
+    f.seek(0, 'b');
+    local b = f.readblob(n+1);
+    f.close();
+    for (local i = 0; i < n; ++i)
+        s += format(@"%c", b.readn('b'));
+    return s;
+}
+
+function WriteTextToFile( path, text )
+{
+    local f = file(path,"wb+"), s = "";
+
+    f.seek(0, 'e');
+
+    foreach(c in text)
+    {
+        f.writen(c, 'b');
+    }
+
+    f.close();
+}
+
+function exportMapToFile( mapName, data ) {
+	local mapFile = mapName;
+	local segments = split( data, "\n" );
+	data = "";
+	foreach( segment in segments )
+	{
+		data += segment;
+	}
+	WriteTextToFile( filePath + mapFile + ".nut", data );
+}
